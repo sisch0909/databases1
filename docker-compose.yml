@@ -1,0 +1,13 @@
+services:
+    db:
+        image: postgres:alpine
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: securepwd
+            POSTGRES_USER: postgres
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
