@@ -5,9 +5,12 @@ services:
         environment:
             POSTGRES_PASSWORD: securepwd
             POSTGRES_USER: postgres
-
+        volumes:
+            - db-data:/var/lib/postgresql/data
     adminer:
         image: adminer
         restart: always
         ports:
             - 8080:8080
+volumes:
+    db-data:
