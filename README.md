@@ -9,3 +9,5 @@ Use:
 Commandline: Navigate to folder --> docker-compose up --> Adminer: localhost:8080
 End: Ctrl+C or (if run in detatched mode) docker-compose down
 
+Adminer: localhost:1234
+Flask-App: localhost:5001
