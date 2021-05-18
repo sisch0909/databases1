@@ -1,16 +1,20 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
 api = Api(app)
 
-class Product(Resource):
-    def get(self):
-        return {
-            'products': ['Ice cream', 'Chocolate', 'Fruit', 'Eggs']
-            }
+@app.route('/')
+def index():
+    return render_template("index.html")
 
-api.add_resource(Product, '/')
+@app.route('/view')
+def view():
+    return render_template("view.html")
+
+@app.route('/edit')
+def edit():
+    return render_template("edit.html")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
