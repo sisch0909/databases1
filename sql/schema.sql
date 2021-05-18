@@ -1,5 +1,5 @@
 CREATE TABLE members(
-    _ID integer NOT NULL Primary key,
+    member_ID integer NOT NULL Primary key,
     email varchar(50) NOT NULL UNIQUE,
     pw varchar(50) NOT NULL,
     first_name varchar(50),
@@ -14,13 +14,14 @@ CREATE TABLE members(
 
 
 CREATE TABLE age_groups(
-    _ID integer NOT NULL Primary key,
+    age_group_ID integer NOT NULL Primary key,
+    age_group_name varchar(50),
     discount integer NOT NULL
 );
 
 
 CREATE TABLE sports(
-    _ID integer NOT NULL Primary key,
+    sport_ID integer NOT NULL Primary key,
     sport_name varchar(50),
     sport_type varchar(50),
     professionalism boolean
@@ -28,28 +29,30 @@ CREATE TABLE sports(
 
 
 CREATE TABLE professionalisms(
-    _ID integer NOT NULL Primary key,
+    professionalism_ID integer NOT NULL Primary key,
     prof_name varchar(50),
     discount integer
 );
 
 
 CREATE TABLE roles(
-    _ID integer NOT NULL Primary key,
+    role_ID integer NOT NULL Primary key,
     role_name varchar(50),
     all_rights boolean,
-    most_rights boolean
+    most_rights boolean,
+    some_rights boolean
 );
 
 
 CREATE TABLE duration_groups(
-    _ID integer NOT NULL Primary key,
-    group_name varchar(50),
+    duration_group_ID integer NOT NULL Primary key,
+    duration_group_name varchar(50),
     discount integer
 );
 
 
 CREATE TABLE memberships(
-    _ID integer NOT NULL Primary key,
+    membership_ID integer NOT NULL Primary key,
+    membership_name varchar(50),
     discount integer
 );
