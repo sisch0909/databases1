@@ -1,15 +1,20 @@
 CREATE TABLE members(
     member_ID integer NOT NULL Primary key,
     email varchar(50) NOT NULL UNIQUE,
-    pw varchar(50) NOT NULL,
+    pw varchar(50) NOT NULL
+);
+
+CREATE TABLE members_info(
+    email varchar(50) NOT NULL Primary key,
     first_name varchar(50),
     last_name varchar(50),
     phone_number varchar(50),
     birthday date,
     gender char(1),
-    membership_type_id integer,
-    duration_group_id integer,
-    role_id integer
+    membership_type_ID integer,
+    duration_group_ID integer,
+    role_ID integer,
+    sport_ID integer
 );
 
 
@@ -54,5 +59,8 @@ CREATE TABLE duration_groups(
 CREATE TABLE memberships(
     membership_ID integer NOT NULL Primary key,
     membership_name varchar(50),
-    discount integer
+    price integer
 );
+
+
+-- ALTER TABLE members ADD FOREIGN KEY (email) REFERENCES members_info(email) ON DELETE CASCADE ON UPDATE CASCADE;
