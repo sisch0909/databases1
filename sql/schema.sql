@@ -29,7 +29,7 @@ CREATE TABLE sports(
     sport_ID integer NOT NULL Primary key,
     sport_name varchar(50),
     sport_type varchar(50),
-    professionalism boolean
+    professionalism_ID integer
 );
 
 
@@ -57,10 +57,9 @@ CREATE TABLE duration_groups(
 
 
 CREATE TABLE memberships(
-    membership_ID integer NOT NULL Primary key,
+    membership_type_ID integer NOT NULL Primary key,
     membership_name varchar(50),
     price integer
 );
 
 
-ALTER TABLE members ADD FOREIGN KEY (email) REFERENCES members_info(email) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1405,7 +1405,7 @@ males_counter = 0
 females_counter = 0
 membership_type_id_list = [1, 2]
 duration_group_id_list = [1, 2, 3, 4]
-sport_id_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+sport_id_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 letters = string.ascii_letters
 numbers = string.digits
 separator = ""
@@ -1484,6 +1484,8 @@ while (id_counter > 100 and id_counter <= 200):
         duration_group_id_list, weights=[0.2, 0.3, 0.4, 0.1], k=1)
     duration_group_id = "".join(str(x) for x in duration_group_id)
     role_id = "4"
+    sport_id = random.choice(sport_id_list)
+
     current_member = [str(id_counter), email, pw, first_name, last_name, phone_number,
                       birthday, gender, str(membership_type_id), str(duration_group_id), str(role_id), str(sport_id)]
     member_list.append(current_member)
