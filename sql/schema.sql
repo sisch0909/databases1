@@ -64,7 +64,8 @@ CREATE TABLE memberships(
 
 CREATE TABLE members_sports(
     member_ID integer,
-    sport_ID integer
+    sport_ID integer,
+    PRIMARY KEY (member_ID, sport_ID)
 );
 
 

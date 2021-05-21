@@ -2,16 +2,36 @@
 from flask import Flask, render_template, request, redirect
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.automap import automap_base
 from pandas import pandas as pd
 from datetime import datetime
+import psycopg2
+from time import sleep
 
 app = Flask(__name__)
-api = Api(app)
+#api = Api(app)
 
+sleep(3)
 #DB connection
-app.config["SQLAlchemy_DATABASE_URI"] = 'mysql://postgres:securepwd@localhost/db'
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:securepwd@db:5432/postgres"
+sleep(3)
 db = SQLAlchemy(app)
+sleep(3)
+Base = automap_base()
+Base.prepare(db.engine, reflect=True)
+Members = Base.classes.members
+Members_info = Base.classes.members_info
+Age_groups = Base.classes.age_groups
+Sports = Base.classes.sports
+Professionalisms = Base.classes.professionalisms
+Roles = Base.classes.roles
+Duration_groups = Base.classes.duration_groups
+Memberships = Base.classes.memberships
+#Members_sports = Base.classes.members_sports
+
+#print(Base.classes.keys())
+#print(db.query(Members).filter_by(email='giles.leonard560@mail.com').first())
+
 
 members = pd.read_csv("members.csv", sep=",")
 
