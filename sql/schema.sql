@@ -62,4 +62,9 @@ CREATE TABLE memberships(
     price integer
 );
 
+CREATE TABLE members_sports(
+    member_ID integer,
+    sport_ID integer
+);
+
 

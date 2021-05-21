@@ -1443,10 +1443,9 @@ while (id_counter <= 100):
         duration_group_id_list, weights=[0.2, 0.3, 0.4, 0.1], k=1)
     duration_group_id = "".join(str(x) for x in duration_group_id)
     role_id = "4"
-    sport_id = random.choice(sport_id_list)
 
     current_member = [str(id_counter), email, pw, first_name, last_name, phone_number,
-                      birthday, gender, str(membership_type_id), str(duration_group_id), str(role_id), str(sport_id)]
+                      birthday, gender, str(membership_type_id), str(duration_group_id), str(role_id)]
     member_list.append(current_member)
 
     print("member " + str(id_counter) + " done")
@@ -1484,10 +1483,10 @@ while (id_counter > 100 and id_counter <= 200):
         duration_group_id_list, weights=[0.2, 0.3, 0.4, 0.1], k=1)
     duration_group_id = "".join(str(x) for x in duration_group_id)
     role_id = "4"
-    sport_id = random.choice(sport_id_list)
+    #sport_id = random.choice(sport_id_list)
 
     current_member = [str(id_counter), email, pw, first_name, last_name, phone_number,
-                      birthday, gender, str(membership_type_id), str(duration_group_id), str(role_id), str(sport_id)]
+                      birthday, gender, str(membership_type_id), str(duration_group_id), str(role_id)]
     member_list.append(current_member)
 
     print("member " + str(id_counter) + " done")
@@ -1502,4 +1501,4 @@ for i in member_list:
 
 for i in member_list:
     print("insert into members_info (email, first_name, last_name, phone_number, birthday, gender, membership_type_ID, duration_group_ID, role_ID, sport_ID) values (""'" +
-          i[1]+"', '" + i[3] + "', "+"'" + i[4] + "'" + ", " + "'"+i[5] + "'" + ", '" + i[6] + "', '" + i[7] + "', " + i[8] + ", " + i[9] + ", " + i[10] + ", " + i[11]+");")
+          i[1]+"', '" + i[3] + "', "+"'" + i[4] + "'" + ", " + "'"+i[5] + "'" + ", '" + i[6] + "', '" + i[7] + "', " + i[8] + ", " + i[9] + ", " + i[10] + ");")
