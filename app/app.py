@@ -1,14 +1,17 @@
 #!/usr/bin/env python
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_restful import Resource, Api
-#from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from pandas import pandas as pd
+from datetime import datetime
 
 app = Flask(__name__)
 api = Api(app)
 
 #DB connection
-#app.config["SQLAlchemy_DATABASE_URI"] = 'mysql://postgres:securepwd@db/main'
+app.config["SQLAlchemy_DATABASE_URI"] = 'mysql://postgres:securepwd@localhost/db'
+
+db = SQLAlchemy(app)
 
 members = pd.read_csv("members.csv", sep=",")
 
@@ -20,8 +23,21 @@ def login():
 def view():
     return render_template("view.html", members=members)
 
-@app.route('/edit')
+@app.route('/edit', methods=[ 'POST', 'GET'])
 def edit():
+    if request.method == "POST":
+        user_firstname = request.form['firstname']
+        user_lastname = request.form['lastname']
+
+        #push to database
+        try:
+            #db.session.add(user_firstname)
+            #db.session.commit(user_firstname)
+            return redirect('/edit')
+        except:
+            return "There was an Error"
+
+
     return render_template("edit.html", members=members)
 
 @app.route('/home')
@@ -57,6 +73,14 @@ def update_data():
     password = request.form.get("password")
     update_statement=" Your data has been succesfully updated!"
     return render_template("edit.html", update_statement=update_statement, members=members)
+
+@app.route('/createaccount')
+def create_account():
+    return render_template("create_account.html", members=members)
+
+@app.route('/resetpassword')
+def reset_password():
+    return render_template("reset_password.html", members=members)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

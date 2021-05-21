@@ -9,9 +9,17 @@
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Name:
+          First name:
         </div>
-          <input type="text" value="{{ members.first_name.1 }} {{ members.last_name.1 }}"/>
+          <input type="text" name="firstname" value="{{ members.first_name.1 }}"/>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Last name:
+        </div>
+          <input type="text" name="lastname" value="{{ members.last_name.1 }}"/>
       </div>
     </li>
     <li class="list-group-item">
@@ -28,9 +36,15 @@
           Gender:
         </div>
         <div>
-          <input className="radio" type="radio" id="female" name="paymentMethod" value="female"> Female </input>
-          <input className="radio" type="radio" id="male" name="paymentMethod" value="male"> Male</input>
-        </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="female">
+            <label class="form-check-label" for="inlineRadio1">Female</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="male">
+            <label class="form-check-label" for="inlineRadio2">Male</label>
+          </div>
+          </div>
       </div>
     </li>
     <li class="list-group-item">
@@ -51,6 +65,9 @@
     </li>
   </ul>
   <p class="text-success personal">{{update_statement}}</p>
-  <button type="submit" class="btn btn-primary personal">Save data</button>
-</form>
+  <div class="row justify-content-center">
+    <button type="submit" class="btn btn-primary personal w-25">Save data</button>
+    <button type="submit" class="btn btn-secondary personal w-25">Delete Account</button>  
+  </div>
+  </form>
 {% endblock %}

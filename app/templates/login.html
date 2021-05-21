@@ -20,6 +20,9 @@
                 </div>
                 <p class="text-danger">{{ error_statement }}</p>
                 <button type="submit" class="btn btn-primary button">Login</button>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ url_for('create_account')}}">New around here? Join Club</a>
+                <a class="dropdown-item" href="{{ url_for('reset_password')}}">Reset password</a>
               </form>
         </section>
     </section>

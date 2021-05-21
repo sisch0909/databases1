@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{{ url_for('update_data')}}" method="POST" class="">
+  <ul class="list-group personal" >
+    <li class="list-group-item bold">
+      Personal Data
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          First name:
+        </div>
+          <input type="text" name="firstname"/>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Last name:
+        </div>
+          <input type="text" name="lastname"/>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Birthdate:
+        </div>
+          <input type="text"/>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Gender:
+        </div>
+        <div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="female">
+            <label class="form-check-label" for="inlineRadio1">Female</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="male">
+            <label class="form-check-label" for="inlineRadio2">Male</label>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Phone:
+        </div>
+        <input type="text"/>
+      </div>
+      </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Email:
+        </div>
+          <input type="text"/>
+      </div>
+    </li>
+  </ul>
+  <ul class="list-group personal" >
+    <li class="list-group-item bold">
+      Membership Data
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Membership type:
+        </div>
+        <div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="female">
+              <label class="form-check-label" for="inlineRadio1">Active</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="male">
+              <label class="form-check-label" for="inlineRadio2">Passive</label>
+            </div>
+          </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Sports:
+        </div>
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Soccer</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <label class="form-check-label" for="inlineCheckbox2">Tennis</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Volleyball</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <label class="form-check-label" for="inlineCheckbox2">Gymnastics</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Handball</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <label class="form-check-label" for="inlineCheckbox2">Swimming</label>
+              </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <p class="text-success personal">{{success_statement}}</p>
+  <div class="row personal">
+    <button type="submit" class="btn btn-primary w-25">Create Account</button>
+  </div>
+  </form>
+{% endblock %}
