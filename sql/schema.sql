@@ -1,6 +1,6 @@
 CREATE TABLE members(
-    member_ID integer NOT NULL Primary key,
-    email varchar(50) NOT NULL UNIQUE,
+    member_ID BIGSERIAL NOT NULL Primary key,
+    email varchar(50) NOT NULL,
     pw varchar(50) NOT NULL
 );
 
@@ -63,4 +63,4 @@ CREATE TABLE memberships(
 );
 
 
--- ALTER TABLE members ADD FOREIGN KEY (email) REFERENCES members_info(email) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE members ADD FOREIGN KEY (email) REFERENCES members_info(email) ON DELETE CASCADE ON UPDATE CASCADE;

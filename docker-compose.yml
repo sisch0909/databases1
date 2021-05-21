@@ -8,6 +8,8 @@ services:
         volumes:
             - ./sql/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
             - ./sql/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+            - ./sql/foreign_keys.sql:/docker-entrypoint-initdb.d/3-foreign_keys.sql
+
 
     adminer:
         image: adminer
