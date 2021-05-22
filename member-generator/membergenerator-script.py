@@ -1496,9 +1496,7 @@ while (id_counter > 100 and id_counter <= 200):
 
 
 for i in member_list:
-    print("insert into members (member_ID, email, pw) values (" +
-          i[0] + ", "+"'" + i[1] + "'" + ", " + "'"+i[2] + "');")
+    print("insert into members (email, pw) values ("+"'" + i[1] + "'" + ", " + "'"+i[2] + "');")
 
 for i in member_list:
-    print("insert into members_info (email, first_name, last_name, phone_number, birthday, gender, membership_type_ID, duration_group_ID, role_ID, sport_ID) values (""'" +
-          i[1]+"', '" + i[3] + "', "+"'" + i[4] + "'" + ", " + "'"+i[5] + "'" + ", '" + i[6] + "', '" + i[7] + "', " + i[8] + ", " + i[9] + ", " + i[10] + ");")
+    print("insert into members_info (member_ID, email, first_name, last_name, phone_number, birthday, gender, membership_type_ID, duration_group_ID, role_ID) values (" + i[0] + ", '" + i[1] + "', ""'" + i[3] + "', "+"'" + i[4] + "'" + ", " + "'"+i[5] + "'" + ", '" + i[6] + "', '" + i[7] + "', " + i[8] + ", " + i[9] + ", " + i[10] + ");")

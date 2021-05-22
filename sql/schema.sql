@@ -1,11 +1,11 @@
 CREATE TABLE members(
-    member_ID BIGSERIAL NOT NULL Primary key,
-    email varchar(50) NOT NULL,
+    email varchar(50) NOT NULL Primary key,
     pw varchar(50) NOT NULL
 );
 
 CREATE TABLE members_info(
-    email varchar(50) NOT NULL Primary key,
+    member_ID integer NOT NULL Primary key,
+    email varchar(50) UNIQUE,
     first_name varchar(50),
     last_name varchar(50),
     phone_number varchar(50),
