@@ -22,7 +22,7 @@ Base.prepare(db.engine, reflect=True)
 Members = Base.classes.members
 Members_info = Base.classes.members_info
 Age_groups = Base.classes.age_groups
-Sports = Base.classes.sports
+#Sports = Base.classes.sports
 Professionalisms = Base.classes.professionalisms
 Roles = Base.classes.roles
 Duration_groups = Base.classes.duration_groups
@@ -42,8 +42,8 @@ def login():
 
 @app.route('/view')
 def view():
-    user_email = session["user_id"]
-    user_data = db.session.query(Members_info).filter_by(email=user_email).first()
+    user_id = session["user_id"]
+    user_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
 
     return render_template("view.html", members=members, user_data = user_data)
 
@@ -55,8 +55,8 @@ def logout():
 
 @app.route('/edit', methods=[ 'POST', 'GET'])
 def edit():
-    user_email = session["user_id"]
-    user_data = db.session.query(Members_info).filter_by(email=user_email).first()
+    user_id = session["user_id"]
+    user_info_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
     
     #get info from data
     firstname = request.form.get("firstname")
@@ -75,17 +75,17 @@ def edit():
         user_lastname = request.form['lastname']
 
         #push to database
-        #user_data.first_name = firstname
-        user_data.last_name = lastname
-        #user_data.gender = gender
-        #user_data.phone_number = phone
-    #   user_data.email = email
+        #user_info_data.first_name = firstname
+        user_info_data.last_name = lastname
+        #user_info_data.gender = gender
+        #user_info_data.phone_number = phone
+    #   user_info_data.email = email
         db.session.commit()
         update_statement=" Your data has been succesfully updated!"
-        return render_template("edit.html", update_statement=update_statement, members=members, user_data = user_data)
+        return render_template("edit.html", update_statement=update_statement, members=members, user_info_data = user_info_data)
 
 
-    return render_template("edit.html", members=members, user_data = user_data)
+    return render_template("edit.html", members=members, user_info_data = user_info_data)
 
 @app.route('/home')
 def home():
@@ -108,8 +108,9 @@ def loginpage():
         error_statement=error_statement)
     elif exists == True:
         user = db.session.query(Members).filter_by(email=email).first()
+        user_info = db.session.query(Members_info).filter_by(email=email).first()
         if user.pw == password:
-            session["user_id"] = user.email
+            session["user_id"] = user_info.member_id
             nachricht = session["user_id"]
             return render_template("welcome.html", nachricht=nachricht)
         else:
