@@ -19,7 +19,7 @@
         <div>
           Last name:
         </div>
-          <input type="text" name="lastname" value="{{ members.last_name.1 }}"/>
+          <input type="text" name="lastname" value="{{ user_data.last_name }}"/>
       </div>
     </li>
     <li class="list-group-item">
@@ -27,7 +27,7 @@
         <div>
           Birthdate:
         </div>
-          <input type="text" value="{{ members.birthday.1 }}"/>
+          <input type="text" name="birthdate" value="{{ members.birthday.1 }}"/>
       </div>
     </li>
     <li class="list-group-item">
@@ -37,11 +37,11 @@
         </div>
         <div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="female">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="f">
             <label class="form-check-label" for="inlineRadio1">Female</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="male">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="m">
             <label class="form-check-label" for="inlineRadio2">Male</label>
           </div>
           </div>
@@ -52,7 +52,7 @@
         <div>
           Phone:
         </div>
-        <input type="text" value="{{ members.phone_number.1 }}"/>
+        <input type="text" name="phone" value="{{ members.phone_number.1 }}"/>
       </div>
       </li>
     <li class="list-group-item">
@@ -60,7 +60,7 @@
         <div>
           Email:
         </div>
-          <input type="text" value="{{ members.email.1 }}"/>
+          <input type="text" name="email" value="{{ members.email.1 }}"/>
       </div>
     </li>
   </ul>
