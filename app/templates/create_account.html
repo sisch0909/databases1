@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="{{ url_for('update_data')}}" method="POST" class="">
+<form action="{{ url_for('really_create_account')}}" method="POST" class="">
   <ul class="list-group personal" >
     <li class="list-group-item bold">
       Personal Data
@@ -11,7 +11,7 @@
         <div>
           First name:
         </div>
-          <input type="text" name="firstname"/>
+          <input type="text" name="firstname" value="{{firstname}}"/>
       </div>
     </li>
     <li class="list-group-item">
@@ -19,7 +19,7 @@
         <div>
           Last name:
         </div>
-          <input type="text" name="lastname"/>
+          <input type="text" name="lastname" value="{{lastname}}"/>
       </div>
     </li>
     <li class="list-group-item">
@@ -27,7 +27,7 @@
         <div>
           Birthdate:
         </div>
-          <input type="text" name="birthdate"/>
+            <input type="date" id="date" name="birthdate" value="{{birthdate}}">
       </div>
     </li>
     <li class="list-group-item">
@@ -37,11 +37,17 @@
         </div>
         <div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="inlineRadio1" name="gender" value="f">
+            <input class="form-check-input" type="radio" id="inlineRadio1" name="gender" value="f"
+            {% if gender == "f" %}checked
+            {% else %}unchecked
+            {% endif %}>
             <label class="form-check-label" for="inlineRadio1">Female</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="inlineRadio2" name="gender" value="m">
+            <input class="form-check-input" type="radio" id="inlineRadio2" name="gender" value="m"
+            {% if gender == "m" %}checked
+            {% else %}unchecked
+            {% endif %}>
             <label class="form-check-label" for="inlineRadio2">Male</label>
           </div>
         </div>
@@ -52,7 +58,7 @@
         <div>
           Phone:
         </div>
-        <input type="text" name="phone"/>
+        <input type="text" name="phone" value="{{phone}}"/>
       </div>
       </li>
     <li class="list-group-item">
@@ -60,10 +66,19 @@
         <div>
           Email:
         </div>
-          <input type="text" name="email"/>
+          <input type="email" name="email" value="{{email}}"/>
       </div> 
     </li>
+    <li class="list-group-item">
+        <div class="datalist">
+          <div>
+            Password:
+          </div>
+            <input type="password" name="password" value="{{password}}"/>
+        </div> 
+      </li>
   </ul>
+
   <ul class="list-group personal" >
     <li class="list-group-item bold">
       Membership Data
@@ -75,12 +90,18 @@
         </div>
         <div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="membership_type" id="inlineRadio1" value="1">
-              <label class="form-check-label" for="inlineRadio1">Active</label>
+              <input class="form-check-input" type="radio" name="membership_type" id="inlineRadio3" value="1"
+              {% if membership_type == "1" %}checked
+              {% else %}unchecked
+              {% endif %}>
+              <label class="form-check-label" for="inlineRadio3">Active</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="membership_type" id="inlineRadio2" value="2">
-              <label class="form-check-label" for="inlineRadio2">Passive</label>
+              <input class="form-check-input" type="radio" name="membership_type" id="inlineRadio4" value="2"
+              {% if membership_type == "2" %}checked
+              {% else %}unchecked
+              {% endif %}>
+              <label class="form-check-label" for="inlineRadio4">Passive</label>
             </div>
           </div>
       </div>

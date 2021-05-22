@@ -9,15 +9,15 @@
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          First name:
+          First name
         </div>
-          <input type="text" name="firstname" value="{{ members.first_name.1 }}"/>
+          <input type="text" name="firstname" value="{{ user_info_data.first_name }}"/>
       </div>
     </li>
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Last name:
+          Last name
         </div>
           <input type="text" name="lastname" value="{{ user_info_data.last_name }}"/>
       </div>
@@ -25,49 +25,48 @@
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Birthdate:
+          Phone
         </div>
-          <input type="text" name="birthdate" value="{{ members.birthday.1 }}"/>
-      </div>
-    </li>
-    <li class="list-group-item">
-      <div class="datalist">
-        <div>
-          Gender:
-        </div>
-        <div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="gender" value="f">
-            <label class="form-check-label" for="inlineRadio1">Female</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="gender" value="m">
-            <label class="form-check-label" for="inlineRadio2">Male</label>
-          </div>
-          </div>
-      </div>
-    </li>
-    <li class="list-group-item">
-      <div class="datalist">
-        <div>
-          Phone:
-        </div>
-        <input type="text" name="phone" value="{{ members.phone_number.1 }}"/>
+        <input type="text" name="phone" value="{{ user_info_data.phone_number }}"/>
       </div>
       </li>
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Email:
+          Email
         </div>
-          <input type="text" name="email" value="{{ members.email.1 }}"/>
+          <input type="text" name="email" value="{{ user_info_data.email }}"/>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
+          Membership type
+        </div>
+        <div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" name="membership_type" value="1" 
+            {% if user_info_data.membership_type_id == 1 %}checked
+            {% else %}unchecked
+            {% endif %}>
+            <label class="form-check-label" for="inlineRadio1"
+            >Active</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" name="membership_type" value="2"
+            {% if user_info_data.membership_type_id == 2 %}checked
+            {% else %}unchecked
+            {% endif %}>
+            <label class="form-check-label" for="inlineRadio2">Passive</label>
+          </div>
+          </div>
       </div>
     </li>
   </ul>
   <p class="text-success personal">{{update_statement}}</p>
   <div class="row justify-content-center">
-    <button type="submit" class="btn btn-primary personal w-25">Save data</button>
-    <button type="submit" class="btn btn-secondary personal w-25">Delete Account</button>  
+    <button type="submit" name="update" value="update" class="btn btn-primary personal w-25">Save data</button>
+    <button type="submit" name="delete" value="delete" class="btn btn-secondary personal w-25">Delete Account</button>  
   </div>
   </form>
 {% endblock %}
