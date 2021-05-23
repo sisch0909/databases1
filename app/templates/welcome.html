@@ -3,10 +3,15 @@
 {% block content %}
 <div class="container-fluid position-absolute">
     <div class="loginframe">
-        <h1 class="row justify-content-center">Welcome, Jody Riley!</h1>
+        <h1 class="row justify-content-center">Welcome, {{ user_data.first_name }} {{ user_data.last_name }}!</h1>
         <p class="row justify-content-center">You are now logged in.</p>
         </br>
         <p class="row justify-content-center fst-italic">On this website you can view and edit your data for our sports club!</p>
+        </br>
+        <div class="row justify-content-center">
+            <button type="submit" onclick="location.href='{{ url_for('view')}}'" class="btn btn-primary personal w-25">View Data</button>
+            <button type="submit" onclick="location.href='{{ url_for('edit')}}'" class="btn btn-secondary personal w-25">Edit Data</button>
+        </div>
     </div>
 </div>
 

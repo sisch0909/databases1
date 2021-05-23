@@ -9,7 +9,6 @@ import psycopg2
 from time import sleep
 
 app = Flask(__name__)
-#api = Api(app)
 
 # DB connection
 app.config["SECRET_KEY"] = "qwertyuiop"
@@ -29,36 +28,44 @@ Duration_groups = Base.classes.duration_groups
 Memberships = Base.classes.memberships
 Members_sports = Base.classes.members_sports
 
-# print(Base.classes.keys())
-# print(db.query(Members).filter_by(email='giles.leonard560@mail.com').first())
-
 # For string in navbar
 logged_in = False
-if logged_in == False:
-    nav_string = "My personal data"
-else:
-    user_id = session["user_id"]
-    nav_name = db.session.query(Members_info).filter_by(
-        member_id=user_id).first()
-    nav_string = nav_name.first_name + " " + nav_name.last_name
-
-members = pd.read_csv("members.csv", sep=",")
-
+nav_string = "My personal data"
+log_string = "Login"
+log_bool = True
 
 # Home
-@app.route('/home')
+@app.route('/')
 def home():
-    return render_template("home.html", nav_string=nav_string)
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
+    return render_template("home.html",
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 # Loginpage
-@app.route('/')
+@app.route('/login')
 def login():
-    return render_template("login.html", nav_string=nav_string)
+    global logged_in
+    global nav_string
+    global log_string
+    log_bool = False
+    return render_template("login.html", 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 @app.route('/login', methods=["POST"])
 def loginpage():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
     email = request.form.get("email")
     password = request.form.get("password")
     error_statement = ""
@@ -68,63 +75,98 @@ def loginpage():
     if not email or not password:
         error_statement = "Please fill in missing fields"
         return render_template("login.html",
-                               email=email,
-                               password=password,
-                               error_statement=error_statement,
-                               nav_string=nav_string)
+                                email=email,
+                                password=password,
+                                error_statement=error_statement,
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
     elif exists == True:
         user = db.session.query(Members).filter_by(email=email).first()
         user_info = db.session.query(
             Members_info).filter_by(email=email).first()
         if user.pw == password:
             session["user_id"] = user_info.member_id
-            nachricht = session["user_id"]
+            user_id = session["user_id"]
+            user_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
             logged_in = True
-            return render_template("welcome.html", nachricht=nachricht, nav_string=nav_string)
+            nav_string = user_data.first_name + " " + user_data.last_name
+            log_string = "Logout"
+            return render_template("welcome.html", 
+                                    nav_string=nav_string,
+                                    user_data=user_data,
+                                    log_string=log_string,
+                                    log_bool=log_bool)
         else:
             error_statement = "Wrong email or password"
             return render_template("login.html",
-                                   email=email,
-                                   password=password,
-                                   error_statement=error_statement,
-                                   nav_string=nav_string)
+                                    email=email,
+                                    password=password,
+                                    error_statement=error_statement,
+                                    nav_string=nav_string,
+                                    log_string=log_string,
+                                    log_bool=log_bool)
     else:
         error_statement = "Wrong email or password"
         return render_template("login.html",
-                               email=email,
-                               password=password,
-                               error_statement=error_statement,
-                               nav_string=nav_string)
+                                email=email,
+                                password=password,
+                                error_statement=error_statement,
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
 
 
 # Logout
-@app.route('/')
+@app.route('/', methods=["POST"])
 def logout():
     session.clear()
+    global logged_in
+    global nav_string
+    global log_string
+    log_bool = False
+    logged_in = False
+    log_string = "Login"
     nav_string = "My personal data"
-    logged_out()
-    return render_template("login.html", nav_string=nav_string)
+    return render_template("login.html", 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 # View data
 @app.route('/view')
 def view():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
+
+    #Users can't view or edit any data if they are not logged in
+    if logged_in == False:
+        return render_template("not_logged_in.html", 
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
+    
     user_id = session["user_id"]
-    user_data = db.session.query(Members_info).filter_by(
-        member_id=user_id).first()
+    user_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
     user_sports_query = db.session.query(Members_sports).filter_by(member_id=user_id).all()
     user_sports =[]
     for i in user_sports_query:
         sports_query = db.session.query(Sports).filter_by(sport_id=i.sport_id).first()
         user_sports.append(sports_query.sport_name)
     
-    
-    sports = user_sports[0]
-    a = 1
-    while len(user_sports) - a > 0:
-        sports = sports + ", " + user_sports[a]
-        a += 1
-        
+    sports="0"
+
+    if len(user_sports)==0:
+        pass
+    else:
+        sports = user_sports[0]
+        a = 1
+        while len(user_sports) - a > 0:
+            sports = sports + ", " + user_sports[a]
+            a += 1   
 
 #    for i in user_sports:
 #        try:
@@ -136,12 +178,22 @@ def view():
 #        else:
 #            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = 2).first()
 #            professionalism_discount = professionalism_discount_query.discount
-    return render_template("view.html", user_data=user_data, sports=sports, nav_string=nav_string)
+    return render_template("view.html", 
+                            user_data=user_data, 
+                            sports=sports, 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 # edit data
 @app.route('/edit', methods=["POST"])
 def update_data():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
+    
     user_id = session["user_id"]
     user_info_data = db.session.query(
         Members_info).filter_by(member_id=user_id).first()
@@ -165,10 +217,11 @@ def update_data():
 
             update_statement = "Your data has been succesfully updated!"
             return render_template("edit.html",
-                                   update_statement=update_statement,
-                                   members=members,
-                                   user_info_data=user_info_data,
-                                   nav_string=nav_string)
+                                    update_statement=update_statement,
+                                    user_info_data=user_info_data,
+                                    nav_string=nav_string,
+                                    log_string=log_string,
+                                    log_bool=log_bool)
         elif request.form.get("delete"):
             user_id = session["user_id"]
             user_query = db.session.query(Members_info).filter_by(member_id=user_id).first()
@@ -178,71 +231,69 @@ def update_data():
             db.session.query(Members_sports).filter_by(member_id=user_id).delete()
             db.session.commit()
 
-            update_statement = "Your account has been succesfully deleted!"
-            return render_template("edit.html",
-                                   update_statement=update_statement,
-                                   members=members,
-                                   user_info_data=user_info_data,
-                                   nav_string=nav_string)
+            logged_in = False
+            log_string = "Login"
+            nav_string = "My personal data"
+
+            update_statement = "Your account has succesfully been deleted!"
+            return render_template("home.html",
+                                    update_statement=update_statement,
+                                    nav_string=nav_string,
+                                    log_string=log_string,
+                                    log_bool=log_bool)
 
     return render_template("edit.html",
-                           update_statement=update_statement,
-                           members=members,
-                           nav_string=nav_string, user_info_data=user_info_data)
+                            nav_string=nav_string, 
+                            user_info_data=user_info_data,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
+
+    #Users can't view or edit any data if they are not logged in
+    if logged_in == False:
+        return render_template("not_logged_in.html", 
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
+
     user_id = session["user_id"]
     user_info_data = db.session.query(
         Members_info).filter_by(member_id=user_id).first()
-
-    # get info from html
-    firstname = request.form.get("firstname")
-    lastname = request.form.get("lastname")
-    phone = request.form.get("phone")
-    email = request.form.get("email")
-    membership_type = request.form.get("membership_type")
-
-    if request.method == "POST":
-        if request.form.get("update"):
-            # push to database
-            user_info_data.first_name = firstname
-            user_info_data.last_name = lastname
-            user_info_data.phone_number = phone
-            user_info_data.email = email
-            user_info_data.membership_type_id = membership_type
-            db.session.commit()
-
-            update_statement = "Your data has been succesfully updated!"
-            return render_template("edit.html",
-                                   update_statement=update_statement,
-                                   members=members,
-                                   user_info_data=user_info_data,
-                                   nav_string=nav_string)
-        elif request.form.get("delete"):
-            update_statement = "Your account has been succesfully deleted!"
-            return render_template("edit.html",
-                                   update_statement=update_statement,
-                                   members=members,
-                                   user_info_data=user_info_data,
-                                   nav_string=nav_string)
-
-    return render_template("edit.html",
-                           members=members,
-                           user_info_data=user_info_data,
-                           nav_string=nav_string)
+    return render_template("edit.html", 
+                            user_info_data=user_info_data, 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 # Create new account
 @app.route('/createaccount')
 def create_account():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
     sports = []
-    return render_template("create_account.html", sports=sports, nav_string=nav_string)
+    return render_template("create_account.html", 
+                            sports=sports, 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 @app.route('/createaccount', methods=["POST"])
 def really_create_account():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
     firstname = request.form.get("firstname")
     lastname = request.form.get("lastname")
     gender = request.form.get("gender")
@@ -281,28 +332,41 @@ def really_create_account():
 
             update_statement = "Application has been sent. You can now login."
         return render_template("create_account.html",
-                               firstname=firstname,
-                               lastname=lastname,
-                               gender=gender,
-                               phone=phone,
-                               membership_type=membership_type,
-                               sports = sports,
-                               birthdate=birthdate,
-                               email=email,
-                               password=password,
-                               update_statement=update_statement,
-                               error_statement=error_statement,
-                               nav_string=nav_string)
+                                firstname=firstname,
+                                lastname=lastname,
+                                gender=gender,
+                                phone=phone,
+                                membership_type=membership_type,
+                                sports = sports,
+                                birthdate=birthdate,
+                                email=email,
+                                password=password,
+                                update_statement=update_statement,
+                                error_statement=error_statement,
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
 
 
 # reset password
 @app.route('/resetpassword')
 def reset_password():
-    return render_template("reset_password.html", nav_string=nav_string)
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
+    return render_template("reset_password.html", 
+                            nav_string=nav_string,
+                            log_string=log_string,
+                            log_bool=log_bool)
 
 
 @app.route('/resetpassword', methods=["POST"])
 def really_reset_password():
+    global logged_in
+    global nav_string
+    global log_string
+    global log_bool
     email = request.form.get("email")
     password = request.form.get("old_password")
     new_password = request.form.get("new_password")
@@ -314,10 +378,12 @@ def really_reset_password():
     if not email or not password or not new_password:
         error_statement = "Please fill in missing fields"
         return render_template("reset_password.html",
-                               email=email,
-                               password=password,
-                               error_statement=error_statement,
-                               nav_string=nav_string)
+                                email=email,
+                                password=password,
+                                error_statement=error_statement,
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
     elif exists == True:
         user = db.session.query(Members).filter_by(email=email).first()
         user_info = db.session.query(
@@ -330,28 +396,33 @@ def really_reset_password():
                 Members_info).filter_by(member_id=user_id).first()
             user_data = db.session.query(Members).filter_by(
                 email=user_info_data.email).first()
-
-            nachricht = session["user_id"]
             logged_in = True
 
             if request.method == "POST":
                 user_data.pw = new_password
                 db.session.commit()
-                return render_template("welcome.html", nachricht=nachricht, nav_string=nav_string)
+                return render_template("welcome.html", 
+                                        nav_string=nav_string, 
+                                        log_string=log_string,
+                                        log_bool=log_bool)
         else:
             error_statement = "Wrong email or password"
             return render_template("reset_password.html",
-                                   email=email,
-                                   password=password,
-                                   error_statement=error_statement,
-                                   nav_string=nav_string)
+                                    email=email,
+                                    password=password,
+                                    error_statement=error_statement,
+                                    nav_string=nav_string, 
+                                    log_string=log_string,
+                                    log_bool=log_bool)
     else:
         error_statement = "Wrong email or password"
         return render_template("reset_password.html",
-                               email=email,
-                               password=password,
-                               error_statement=error_statement,
-                               nav_string=nav_string)
+                                email=email,
+                                password=password,
+                                error_statement=error_statement,
+                                nav_string=nav_string,
+                                log_string=log_string,
+                                log_bool=log_bool)
 
 
 if __name__ == '__main__':
