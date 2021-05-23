@@ -112,10 +112,23 @@ def view():
     user_id = session["user_id"]
     user_data = db.session.query(Members_info).filter_by(
         member_id=user_id).first()
-    user_sports = db.session.query(Members_sports).filter_by(member_id=user_id).all()
-    for i in db.session.query (Members_info, Sports).filter_by(Link.member_id == user_id).all():
-        user_sports.append(i)
+    user_sports_query = db.session.query(Members_sports).filter_by(member_id=user_id).all()
+    user_sports =[]
+    for i in user_sports_query:
+        sports_query = db.session.query(Sports).filter_by(sport_id=i.sport_id).first()
+        user_sports.append(sports_query.sport_name)
     print(user_sports)
+
+#    for i in user_sports:
+#        try:
+#            if sports_query
+#        professionalism_exists = db.session.query.filter(Professionalisms.professionalism_id)
+#        if sports_query.:
+#            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = user_sports_query.professionalism_id).first()
+#            professionalism_discount = professionalism_discount_query.discount
+#        else:
+#            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = 2).first()
+#            professionalism_discount = professionalism_discount_query.discount
     return render_template("view.html", user_data=user_data, user_sports=user_sports, nav_string=nav_string)
 
 
