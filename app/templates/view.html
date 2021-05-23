@@ -32,9 +32,7 @@
           Gender
         </div>
         <div>
-          {% if user_data.gender == 'm' %}male
-          {% else %}female
-          {% endif %}
+          {{user_data.gender}}
         </div>
       </div>
     </li>
@@ -67,26 +65,20 @@
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Membership type
+          Membership Type
         </div>
         <div>
-          {% if user_data.membership_type_id == 1 %}active
-          {% elif user_data.membership_type_id==2 %}passive
-          {% endif %}
+          {{membership_data.membership_name}}
         </div>
       </div>
     </li>
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Duration group
+          Duration Group
         </div>
         <div>
-          {% if user_data.duration_group_id == 1 %}newbie
-          {% elif user_data.duration_group_id == 2 %}regular
-          {% elif user_data.duration_group_id == 3 %}longtimer
-          {% elif user_data.duration_group_id == 4 %}legend
-          {% endif %}
+          {{duration_group_data.duration_group_name}}
         </div>
       </div>
     </li>
@@ -96,11 +88,7 @@
           Role
         </div>
         <div>
-          {% if user_data.role_id == 1 %}admin
-          {% elif user_data.role_id == 2 %}president
-          {% elif user_data.role_id == 3 %}chairman
-          {% elif user_data.role_id == 4 %}regular
-          {% endif %}
+          {{role_data.role_name}}
         </div>
       </div>
     </li>
@@ -123,39 +111,41 @@
     <li class="list-group-item">
       <div class="datalist">
         <div>
+          Original Charge
+        </div>
+        <div>
+          {{original_price}} €
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+    <li class="list-group-item">
+      <div class="datalist">
+        <div>
           Age Discount
         </div>
         <div>
-          X%
-          {% if user_data.age_group_id == 1 %}50%
-          {% elif user_data.age_group_id == 2 %}30%
-          {% elif user_data.age_group_id == 3 %}0%
-          {% elif user_data.age_group_id == 4 %}20%
-          {% endif %}
+          {{age_group_data.discount}} %
         </div>
       </div>
     </li>
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Duration Discount
+          Membership Duration Discount
         </div>
         <div>
-          {% if user_data.duration_group_id == 1 %}0%
-          {% elif user_data.duration_group_id == 2 %}10%
-          {% elif user_data.duration_group_id == 3 %}20%
-          {% elif user_data.duration_group_id == 4 %}30%
-          {% endif %}
+          {{duration_group_data.discount}} %
         </div>
       </div>
     </li>
     <li class="list-group-item">
       <div class="datalist">
         <div>
-          Proffesionalism Discount
+          Professionalism Discount
         </div>
         <div>
-          X%
+          {{professionalism_discount}} %
         </div>
       </div>
   </ul>
@@ -166,7 +156,7 @@
           Charge
         </div>
         <div>
-          €
+          {{price}} €
         </div>
       </div>
     </li>

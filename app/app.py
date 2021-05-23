@@ -151,11 +151,18 @@ def view():
     
     user_id = session["user_id"]
     user_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
+    role_data = db.session.query(Roles).filter_by(role_id=user_data.role_id).first()
+    age_group_data = db.session.query(Age_groups).filter_by(age_group_id=user_data.age_group_id).first()
+    duration_group_data = db.session.query(Duration_groups).filter_by(duration_group_id=user_data.duration_group_id).first()
+    membership_data = db.session.query(Memberships).filter_by(membership_type_id=user_data.membership_type_id).first()
+
     user_sports_query = db.session.query(Members_sports).filter_by(member_id=user_id).all()
     user_sports =[]
+    user_sports_professionalism =[]
     for i in user_sports_query:
         sports_query = db.session.query(Sports).filter_by(sport_id=i.sport_id).first()
         user_sports.append(sports_query.sport_name)
+        user_sports_professionalism.append(sports_query.professionalism_id)
     
     sports="0"
 
@@ -168,19 +175,36 @@ def view():
             sports = sports + ", " + user_sports[a]
             a += 1   
 
-#    for i in user_sports:
-#        try:
-#            if sports_query
-#        professionalism_exists = db.session.query.filter(Professionalisms.professionalism_id)
-#        if sports_query.:
-#            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = user_sports_query.professionalism_id).first()
-#            professionalism_discount = professionalism_discount_query.discount
-#        else:
-#            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = 2).first()
-#            professionalism_discount = professionalism_discount_query.discount
+    professional = False
+    for i in range(len(user_sports_professionalism)):
+        if user_sports_professionalism[i] == 1:
+            professional = True
+            break
+    
+    if professional == True:
+        professionalism_query = db.session.query(Professionalisms).filter_by(professionalism_id=1).first()
+    else:
+        professionalism_query = db.session.query(Professionalisms).filter_by(professionalism_id=2).first()
+    
+    professionalism_discount = professionalism_query.discount
+    age_group_discount = age_group_data.discount
+    duration_group_discount = duration_group_data.discount
+    original_price = membership_data.price
+
+    price = int(original_price - original_price*(professionalism_discount*0.01 + age_group_discount*0.01 + duration_group_discount*0.01))
+    original_price = int(original_price)
+
+
     return render_template("view.html", 
                             user_data=user_data, 
-                            sports=sports, 
+                            sports=sports,
+                            original_price=original_price,
+                            price = price,
+                            professionalism_discount = professionalism_discount,
+                            age_group_data = age_group_data,
+                            duration_group_data = duration_group_data,
+                            role_data = role_data,
+                            membership_data = membership_data, 
                             nav_string=nav_string,
                             log_string=log_string,
                             log_bool=log_bool)
@@ -195,8 +219,8 @@ def update_data():
     global log_bool
     
     user_id = session["user_id"]
-    user_info_data = db.session.query(
-        Members_info).filter_by(member_id=user_id).first()
+    user_info_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
+    user_data = db.session.query(Members).filter_by(email = user_info_data.email).first()
 
     # get info from html
     firstname = request.form.get("firstname")
@@ -321,14 +345,21 @@ def really_create_account():
     error_statement = ""
     update_statement = ""
     if request.method == "POST":
-        if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password: #or len(sports)==0:
+        if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password or len(sports)==0:
             error_statement = "Please fill in missing fields"
         else:
-            new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=4)
+            new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=3)
             new_member2 = Members(email=email, pw=password)
             db.session.add(new_member1)
             db.session.add(new_member2)
             db.session.commit()
+            new_member_query = db.session.query(Members_info).filter_by(email=email).first()
+            new_member_id = new_member_query.member_id
+            for sport in sports:
+                new_members_sports = Members_sports(member_id=new_member_id, sport_id=sport)
+                db.session.add(new_members_sports)
+                db.session.commit()
+            
 
             update_statement = "Application has been sent. You can now login."
         return render_template("create_account.html",
@@ -401,10 +432,14 @@ def really_reset_password():
             if request.method == "POST":
                 user_data.pw = new_password
                 db.session.commit()
+                logged_in = True
+                nav_string = user_info.first_name + " " + user_info.last_name
+                log_string = "Logout"
                 return render_template("welcome.html", 
                                         nav_string=nav_string, 
                                         log_string=log_string,
-                                        log_bool=log_bool)
+                                        log_bool=log_bool,
+                                        user_data=user_info)
         else:
             error_statement = "Wrong email or password"
             return render_template("reset_password.html",
