@@ -170,6 +170,14 @@ def update_data():
                                    user_info_data=user_info_data,
                                    nav_string=nav_string)
         elif request.form.get("delete"):
+            user_id = session["user_id"]
+            user_query = db.session.query(Members_info).filter_by(member_id=user_id).first()
+            user_email = user_query.email
+            db.session.query(Members).filter_by(email=user_email).delete()
+            db.session.query(Members_info).filter_by(member_id=user_id).delete()
+            db.session.query(Members_sports).filter_by(member_id=user_id).delete()
+            db.session.commit()
+
             update_statement = "Your account has been succesfully deleted!"
             return render_template("edit.html",
                                    update_statement=update_statement,
@@ -262,9 +270,15 @@ def really_create_account():
     error_statement = ""
     update_statement = ""
     if request.method == "POST":
-        if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password or len(sports)==0:
+        if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password: #or len(sports)==0:
             error_statement = "Please fill in missing fields"
         else:
+            new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=4)
+            new_member2 = Members(email=email, pw=password)
+            db.session.add(new_member1)
+            db.session.add(new_member2)
+            db.session.commit()
+
             update_statement = "Application has been sent. You can now login."
         return render_template("create_account.html",
                                firstname=firstname,
