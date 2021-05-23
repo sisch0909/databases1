@@ -4,7 +4,7 @@ CREATE TABLE members(
 );
 
 CREATE TABLE members_info(
-    member_ID integer NOT NULL Primary key,
+    member_ID SERIAL NOT NULL Primary key,
     email varchar(50) UNIQUE,
     first_name varchar(50),
     last_name varchar(50),
@@ -63,7 +63,7 @@ CREATE TABLE memberships(
 );
 
 CREATE TABLE members_sports(
-    members_sports_ID integer NOT NULL Primary key,
+    members_sports_ID SERIAL NOT NULL Primary key,
     member_ID integer,
     sport_ID integer
 );
