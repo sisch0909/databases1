@@ -27,7 +27,7 @@ Professionalisms = Base.classes.professionalisms
 Roles = Base.classes.roles
 Duration_groups = Base.classes.duration_groups
 Memberships = Base.classes.memberships
-#Members_sports = Base.classes.members_sports
+Members_sports = Base.classes.members_sports
 
 # print(Base.classes.keys())
 # print(db.query(Members).filter_by(email='giles.leonard560@mail.com').first())
@@ -112,7 +112,7 @@ def view():
     user_id = session["user_id"]
     user_data = db.session.query(Members_info).filter_by(
         member_id=user_id).first()
-    user_sports = []
+    user_sports = db.session.query(Members_sports).filter_by(member_id=user_id).all()
     for i in db.session.query (Members_info, Sports).filter_by(Link.member_id == user_id).all():
         user_sports.append(i)
     print(user_sports)
