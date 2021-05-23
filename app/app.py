@@ -117,7 +117,14 @@ def view():
     for i in user_sports_query:
         sports_query = db.session.query(Sports).filter_by(sport_id=i.sport_id).first()
         user_sports.append(sports_query.sport_name)
-    print(user_sports)
+    
+    
+    sports = user_sports[0]
+    a = 1
+    while len(user_sports) - a > 0:
+        sports = sports + ", " + user_sports[a]
+        a += 1
+        
 
 #    for i in user_sports:
 #        try:
@@ -129,7 +136,7 @@ def view():
 #        else:
 #            professionalism_discount_query = db.session.query(Professionalisms).filter_by(professionalism_id = 2).first()
 #            professionalism_discount = professionalism_discount_query.discount
-    return render_template("view.html", user_data=user_data, user_sports=user_sports, nav_string=nav_string)
+    return render_template("view.html", user_data=user_data, sports=sports, nav_string=nav_string)
 
 
 # edit data
@@ -222,7 +229,8 @@ def edit():
 # Create new account
 @app.route('/createaccount')
 def create_account():
-    return render_template("create_account.html", nav_string=nav_string)
+    sports = []
+    return render_template("create_account.html", sports=sports, nav_string=nav_string)
 
 
 @app.route('/createaccount', methods=["POST"])
@@ -236,22 +244,40 @@ def really_create_account():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    #getting picked sports
+    sports = []
+    if request.form.get("2") == "2":
+        sports.append(2)
+    if request.form.get("4") == "4":
+        sports.append(4)
+    if request.form.get("6") == "6":
+        sports.append(6)
+    if request.form.get("8") == "8":
+        sports.append(8)
+    if request.form.get("10") == "10":
+        sports.append(10)
+    if request.form.get("12") == "12":
+        sports.append(12)
+
+    error_statement = ""
+    update_statement = ""
     if request.method == "POST":
-        #new_member1 = Members_info(email="fgehfkshfsd@fsd.com", first_name=firstname, last_name=lastname, phone_number=phone, birthday="2000-01-01", gender=gender, membership_type_id=membership_type, duration_group=1, role_id=4)
-        # db.session.add(new_member1)
-        # db.session.commit()
-        update_statement = "Application has been sent. You can now login."
+        if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password or len(sports)==0:
+            error_statement = "Please fill in missing fields"
+        else:
+            update_statement = "Application has been sent. You can now login."
         return render_template("create_account.html",
                                firstname=firstname,
                                lastname=lastname,
                                gender=gender,
                                phone=phone,
                                membership_type=membership_type,
-                               #sport = sport,
+                               sports = sports,
                                birthdate=birthdate,
                                email=email,
                                password=password,
                                update_statement=update_statement,
+                               error_statement=error_statement,
                                nav_string=nav_string)
 
 

@@ -113,34 +113,47 @@
         </div>
         <div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="2" value="2" 
+                {% if 2 in sports %}checked
+                {% endif %}>
                 <label class="form-check-label" for="inlineCheckbox1">Soccer</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="4" value="4"
+                {% if 4 in sports %}checked
+                {% endif %}>
                 <label class="form-check-label" for="inlineCheckbox2">Tennis</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1">Volleyball</label>
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="6" value="6"
+                {% if 6 in sports %}checked
+                {% endif %}>
+                <label class="form-check-label" for="inlineCheckbox3">Volleyball</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                <label class="form-check-label" for="inlineCheckbox2">Gymnastics</label>
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="8" value="8"
+                {% if 8 in sports %}checked
+                {% endif %}>
+                <label class="form-check-label" for="inlineCheckbox4">Gymnastics</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1">Handball</label>
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox5" name="10" value="10"
+                {% if 10 in sports %}checked
+                {% endif %}>
+                <label class="form-check-label" for="inlineCheckbox5">Handball</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                <label class="form-check-label" for="inlineCheckbox2">Swimming</label>
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox6" name="12" value="12"
+                {% if 12 in sports %}checked
+                {% endif %}>
+                <label class="form-check-label" for="inlineCheckbox6">Swimming</label>
               </div>
         </div>
       </div>
     </li>
   </ul>
-  <p class="text-success personal">{{success_statement}}</p>
+  <p class="text-danger personal">{{error_statement}}</p>
+  <p class="text-success personal">{{update_statement}}</p>
   <div class="row personal">
     <button type="submit" class="btn btn-primary w-25">Create Account</button>
   </div>
