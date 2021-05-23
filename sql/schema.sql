@@ -14,7 +14,7 @@ CREATE TABLE members_info(
     membership_type_ID integer,
     duration_group_ID integer,
     role_ID integer,
-    sport_ID integer
+    age_group_ID integer
 );
 
 
