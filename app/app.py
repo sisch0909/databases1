@@ -4,17 +4,26 @@ from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.automap import automap_base
 from pandas import pandas as pd
-from datetime import datetime
+from datetime import datetime, date
 import psycopg2
 from time import sleep
 
 app = Flask(__name__)
 
 # DB connection
-app.config["SECRET_KEY"] = "qwertyuiop"
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:securepwd@db:5432/postgres"
-sleep(3)
+retries_left = 200
+while retries_left > 0:
+    try:
+        app.config["SECRET_KEY"] = "qwertyuiop"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:securepwd@db:5432/postgres"
+        retries_left = 0
+    except:
+        retries_left = retries_left - 1
+        sleep(5)
+
 db = SQLAlchemy(app)
+
+sleep(3)
 
 Base = automap_base()
 Base.prepare(db.engine, reflect=True)
@@ -327,6 +336,21 @@ def really_create_account():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    date_time_obj = datetime. strptime(birthdate, '%Y-%m-%d')
+    date_time_obj = date_time_obj.date()
+    time_difference = date.today() - date_time_obj
+    age_days = time_difference.days
+    age = age_days / 365
+    if age <= 12:
+        age_group_id = 1
+    elif age > 12 and age <=19:
+        age_group_id = 2
+    elif age >19 and age <= 65:
+        age_group_id = 3
+    else:
+        age_group_id = 4
+
+
     #getting picked sports
     sports = []
     if request.form.get("2") == "2":
@@ -344,17 +368,22 @@ def really_create_account():
 
     error_statement = ""
     update_statement = ""
+    exists = db.session.query(db.exists().where(Members.email == email)).scalar()
+
     if request.method == "POST":
         if not firstname or not lastname or not gender or not phone or not membership_type or not birthdate or not email or not password or len(sports)==0:
             error_statement = "Please fill in missing fields"
+        elif exists == True:
+            error_statement = "This email is already in use."
         else:
-            new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=3)
+            new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=3, age_group_id=age_group_id)
             new_member2 = Members(email=email, pw=password)
             db.session.add(new_member1)
             db.session.add(new_member2)
             db.session.commit()
             new_member_query = db.session.query(Members_info).filter_by(email=email).first()
             new_member_id = new_member_query.member_id
+
             for sport in sports:
                 new_members_sports = Members_sports(member_id=new_member_id, sport_id=sport)
                 db.session.add(new_members_sports)
