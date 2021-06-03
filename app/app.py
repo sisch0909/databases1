@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, session
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.automap import automap_base
-from pandas import pandas as pd
 from datetime import datetime, date
 import psycopg2
 from time import sleep
@@ -91,9 +90,9 @@ def loginpage():
                                 log_string=log_string,
                                 log_bool=log_bool)
     elif exists == True:
+        #create python object from database record
         user = db.session.query(Members).filter_by(email=email).first()
-        user_info = db.session.query(
-            Members_info).filter_by(email=email).first()
+        user_info = db.session.query(Members_info).filter_by(email=email).first()
         if user.pw == password:
             session["user_id"] = user_info.member_id
             user_id = session["user_id"]
@@ -159,15 +158,19 @@ def view():
                                 log_bool=log_bool)
     
     user_id = session["user_id"]
+
+    #create python objects from database records
     user_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
     role_data = db.session.query(Roles).filter_by(role_id=user_data.role_id).first()
     age_group_data = db.session.query(Age_groups).filter_by(age_group_id=user_data.age_group_id).first()
     duration_group_data = db.session.query(Duration_groups).filter_by(duration_group_id=user_data.duration_group_id).first()
     membership_data = db.session.query(Memberships).filter_by(membership_type_id=user_data.membership_type_id).first()
-
     user_sports_query = db.session.query(Members_sports).filter_by(member_id=user_id).all()
-    user_sports =[]
-    user_sports_professionalism =[]
+    
+    user_sports = []
+    user_sports_professionalism = []
+
+    #pulling sports for member from database
     for i in user_sports_query:
         sports_query = db.session.query(Sports).filter_by(sport_id=i.sport_id).first()
         user_sports.append(sports_query.sport_name)
@@ -240,6 +243,7 @@ def update_data():
 
     if request.method == "POST":
         if request.form.get("update"):
+            
             # push to database
             user_info_data.first_name = firstname
             user_info_data.last_name = lastname
@@ -259,6 +263,8 @@ def update_data():
             user_id = session["user_id"]
             user_query = db.session.query(Members_info).filter_by(member_id=user_id).first()
             user_email = user_query.email
+
+            #deleting account in database
             db.session.query(Members).filter_by(email=user_email).delete()
             db.session.query(Members_info).filter_by(member_id=user_id).delete()
             db.session.query(Members_sports).filter_by(member_id=user_id).delete()
@@ -368,6 +374,8 @@ def really_create_account():
 
     error_statement = ""
     update_statement = ""
+    
+    #checking in database if email is already used by other account (creating account)
     exists = db.session.query(db.exists().where(Members.email == email)).scalar()
 
     if request.method == "POST":
@@ -376,6 +384,8 @@ def really_create_account():
         elif exists == True:
             error_statement = "This email is already in use."
         else:
+            
+            #creating new account and pushing to database
             new_member1 = Members_info(email=email, first_name=firstname, last_name=lastname, phone_number=phone, birthday=birthdate, gender=gender, membership_type_id=membership_type, duration_group_id=1, role_id=3, age_group_id=age_group_id)
             new_member2 = Members(email=email, pw=password)
             db.session.add(new_member1)
@@ -452,10 +462,10 @@ def really_reset_password():
             # DB connection
             session["user_id"] = user_info.member_id
             user_id = session["user_id"]
-            user_info_data = db.session.query(
-                Members_info).filter_by(member_id=user_id).first()
-            user_data = db.session.query(Members).filter_by(
-                email=user_info_data.email).first()
+            
+            #applying new password to database
+            user_info_data = db.session.query(Members_info).filter_by(member_id=user_id).first()
+            user_data = db.session.query(Members).filter_by(email=user_info_data.email).first()
             logged_in = True
 
             if request.method == "POST":

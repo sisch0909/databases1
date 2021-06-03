@@ -32,7 +32,9 @@
           Gender
         </div>
         <div>
-          {{user_data.gender}}
+          {% if user_data.gender == "m" %}male
+            {% else %}female
+            {% endif %}
         </div>
       </div>
     </li>
