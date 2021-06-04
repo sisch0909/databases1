@@ -17,4 +17,16 @@ UPDATE members_info SET duration_group_ID = 1 WHERE age_group_ID = 1;
 UPDATE members_info SET duration_group_ID = floor(2*random()+1) WHERE age_group_ID = 2;
 UPDATE members_info SET duration_group_ID = floor(4*random()+1) WHERE age_group_ID = 3 OR age_group_ID = 4;
 
+CREATE VIEW acitve_members AS
+SELECT * FROM members_info WHERE membership_type_ID = 1;
+
+CREATE PROCEDURE update_age_groups ()
+LANGUAGE SQL
+AS $$
+UPDATE members_info SET age_group_ID = 1 WHERE date_part('year', age(birthday)) <= 12;
+UPDATE members_info SET age_group_ID = 2 WHERE date_part('year', age(birthday)) > 12 AND date_part('year', age(birthday)) <= 19;
+UPDATE members_info SET age_group_ID = 3 WHERE date_part('year', age(birthday)) > 19 AND date_part('year', age(birthday)) <= 65;
+UPDATE members_info SET age_group_ID = 4 WHERE date_part('year', age(birthday)) > 65;
+$$;
+
 
