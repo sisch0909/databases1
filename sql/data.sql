@@ -71,7 +71,7 @@ insert into members_sports (member_ID, sport_ID) values (36, 1);
 insert into members_sports (member_ID, sport_ID) values (37, 8);
 insert into members_sports (member_ID, sport_ID) values (38, 3);
 insert into members_sports (member_ID, sport_ID) values (39, 10);
-insert into members_sports (member_ID, sport_ID) values (40, 6);
+insert into members_sports (member_ID, sport_ID) values (40, 5);
 insert into members_sports (member_ID, sport_ID) values (41, 8);
 insert into members_sports (member_ID, sport_ID) values (42, 1);
 insert into members_sports (member_ID, sport_ID) values (43, 3);
